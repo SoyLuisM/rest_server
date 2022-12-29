@@ -27,13 +27,7 @@ const post_function = async(req, res) => {
     //obtener datos enviaros del usuario
     const {nombre,email, password} = req.body;
 
-    //verificar si el correo existe
-    const existEmail = await Usuario.findOne({ email });
-    if(existEmail){
-        return res.status(400).json({
-            msg: "el correo ya existe"
-        });
-    }
+
     //encriptar contraseña
     const salt = bcrypt.genSaltSync();
 
