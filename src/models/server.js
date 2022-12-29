@@ -1,11 +1,16 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('../database/config_mongo');
 
 class Server{
     constructor(port = 3001){
         this.app = express();
         this.port = port;
         this.usersPath = '/api/users';
+
+        //Connect DB
+        this.connectar_DB();
+
         //Middlewares
         this.middlewares();
         
@@ -13,6 +18,10 @@ class Server{
         this.routes();
     }
 
+    async connectar_DB(){
+        await dbConnection();
+    }
+    
     middlewares(){
         // CORS
         this.app.use(cors());
