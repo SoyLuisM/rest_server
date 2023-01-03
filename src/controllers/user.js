@@ -14,11 +14,18 @@ const get_function = (req = request, res = response) => {
     });
 }
 
-const put_function = (req, res) => {
+const put_function = async(req, res) => {
     const id = req.params.id;
+    const { _id, password, google, email, ...resto} = req.body;
+
+    const salt = bcrypt.genSaltSync();
+    resto.password = bcrypt.hashSync(password,salt);
+
+    const usuario = await Usuario.findByIdAndUpdate(id, resto);
+    
     res.status(200).json({
         msg: "api PUT",
-        id,
+        usuario
     });
 }
 
@@ -35,7 +42,7 @@ const post_function = async(req, res) => {
     const usuario = new Usuario({
         nombre,
         email,
-        password: bcrypt.hashSync(password,salt)
+        password: bcrypt.hashSync(password,salt),
     });
 
     //guardar BD
